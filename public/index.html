@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>Sentinel — Secure Login Monitoring</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#"><span class="brand-mark">S</span><span>sentinel<small>SECURITY CONSOLE</small></span></a>
+      <div class="nav-label">WORKSPACE</div>
+      <button class="nav-item active" id="navOverview"><span>▦</span> Overview</button>
+      <button class="nav-item" id="navEvents"><span>◷</span> Security events</button>
+      <button class="nav-item" id="navUsers"><span>♙</span> User accounts</button>
+      <div class="sidebar-bottom">
+        <div class="status-dot"></div><div><strong>Monitoring active</strong><small>Login protection enabled</small></div>
+      </div>
+      <div class="side-foot">SENTINEL CONSOLE <span>v1.0.0</span></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><div class="eyebrow">SECURITY CENTER / <span id="pageLabel">OVERVIEW</span></div><h1 id="pageTitle">Security overview</h1></div>
+        <div class="top-actions"><span class="live-pill"><i></i> SYSTEM LIVE</span><button class="icon-button" id="refreshBtn" title="Refresh dashboard">↻</button><div class="avatar" id="avatar">A</div><div class="user-meta"><strong id="topUsername">Administrator</strong><small id="topRole">Security admin</small></div><button class="text-button" id="logoutBtn">Log out</button></div>
+      </header>
+
+      <section id="authScreen" class="auth-layout hidden">
+        <div class="auth-art"><div class="auth-glow"></div><div class="shield">✓</div><p class="eyebrow">SENTINEL SECURITY</p><h2>Know what’s happening<br/>behind every login.</h2><p class="muted">Monitor authentication activity, spot suspicious patterns, and keep your users safer.</p><div class="auth-feature">● &nbsp; Real-time event logging</div><div class="auth-feature">● &nbsp; Brute-force rate protection</div><div class="auth-feature">● &nbsp; Admin-only security insights</div></div>
+        <div class="auth-card"><div class="auth-tabs"><button class="auth-tab active" data-tab="login">Sign in</button><button class="auth-tab" data-tab="register">Create account</button></div><h2 id="authTitle">Welcome back</h2><p class="muted" id="authSubtitle">Sign in to your security workspace.</p>
+          <form id="authForm"><div class="field hidden" id="usernameField"><label for="username">USERNAME</label><input id="username" autocomplete="username" placeholder="e.g. alexmorgan" minlength="3"/></div>
+            <div class="field"><label for="email">EMAIL ADDRESS</label><input id="email" type="email" autocomplete="email" required placeholder="you@example.com"/></div>
+            <div class="field"><label for="password">PASSWORD</label><input id="password" type="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 characters"/></div>
+            <button class="primary-button full" id="authSubmit" type="submit">Sign in securely <span>→</span></button><p class="form-message" id="authMessage"></p></form>
+          <p class="auth-note">Protected with password hashing and signed session tokens.</p>
+        </div>
+      </section>
+
+      <section id="dashboard" class="hidden">
+        <div class="welcome-row"><div><h2>Good to see you, <span id="welcomeName">Admin</span></h2><p class="muted">Here’s what’s happening across your authentication system.</p></div></div>
+        <div id="adminNotice" class="notice hidden">You are signed in as a standard user. You can review security activity associated with your account below.</div>
+        <section id="userSecurityPanel" class="panel user-security-panel hidden">
+          <div class="panel-heading">
+            <div><h3>Your security activity</h3><p class="muted">Failed login attempts and flagged activity associated with your email in the last 24 hours. Use the refresh button in the top bar to update.</p></div>
+          </div>
+          <div class="user-security-stats">
+            <div class="user-mini-stat"><span>Failed login attempts</span><strong id="userFailedCount">—</strong></div>
+            <div class="user-mini-stat"><span>Rate-limit blocks</span><strong id="userLimitedCount">—</strong></div>
+            <div class="user-mini-stat"><span>Flagged events</span><strong id="userSuspiciousCount">—</strong></div>
+          </div>
+          <div class="panel-heading user-events-heading"><div><h3>Recent activity for your account</h3><p class="muted">Only events matching your email are shown.</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>EVENT</th><th>DETAILS</th><th>TIME</th></tr></thead><tbody id="userEventsBody"><tr><td colspan="3" class="empty">Loading your security activity…</td></tr></tbody></table></div>
+          <div class="device-security"><div><strong>Session security</strong><p class="muted">Sign out this account from every device where its current sessions are active.</p></div><button class="danger-button" id="logoutAllBtn">Sign out all devices</button></div>
+        </section>
+        <div class="stats-grid" id="statsGrid">
+          <article class="stat-card"><div class="stat-top"><span>Total users</span><span class="stat-icon blue">♙</span></div><div class="stat-number" id="statUsers">—</div><div class="stat-foot"><span class="tiny-dot blue-dot"></span> Registered accounts</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Security events</span><span class="stat-icon violet">⌁</span></div><div class="stat-number" id="statEvents">—</div><div class="stat-foot">All recorded activity</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Failed logins</span><span class="stat-icon orange">↗</span></div><div class="stat-number" id="statFailed">—</div><div class="stat-foot"><span class="tiny-dot orange-dot"></span> Last 24 hours</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Flagged events</span><span class="stat-icon red">⚠</span></div><div class="stat-number" id="statSuspicious">—</div><div class="stat-foot"><span class="tiny-dot red-dot"></span> Failed or rate-limited activity in last 24h</div></article>
+        </div>
+        <div class="content-grid">
+          <section class="panel activity-panel"><div class="panel-heading"><div><h3>Authentication activity</h3><p class="muted">Recent events from your system</p></div><span class="subtle-label">LATEST 100</span></div><div class="filters"><input id="eventSearch" placeholder="⌕  Search email, IP or event..." /><select id="eventFilter"><option value="all">All events</option><option value="login_success">Successful login</option><option value="login_failed">Failed login</option><option value="rate_limited">Rate limited</option><option value="register">Registration</option><option value="suspicious">Suspicious only</option></select></div><div class="table-wrap"><table><thead><tr><th>EVENT</th><th>ACCOUNT / DETAILS</th><th>IP ADDRESS</th><th>TIME</th></tr></thead><tbody id="eventsBody"><tr><td colspan="4" class="empty">Loading activity…</td></tr></tbody></table></div><div class="table-footer" id="eventCount">Showing recent activity</div></section>
+          <section class="panel side-panel"><div class="panel-heading"><div><h3>Security indicators</h3><p class="muted">Recorded during the last 24 hours</p></div><span class="mini-shield">⌁</span></div><div class="insight-list"><div class="insight"><span class="insight-icon red">!</span><div><strong>Failed login attempts</strong><small>Incorrect password or unknown account</small></div><b id="insightFailed">0</b></div><div class="insight"><span class="insight-icon orange">↗</span><div><strong>Rate-limit triggers</strong><small>Repeated requests blocked</small></div><b id="insightLimited">0</b></div><div class="insight"><span class="insight-icon violet">⌁</span><div><strong>Flagged events</strong><small>Events marked for admin review</small></div><b id="insightSuspicious">0</b></div></div><div class="rule-note"><strong>How detection works</strong><p>Failed login attempts and requests blocked by rate limiting are flagged for review. Repeated login attempts are rate-limited during a 15-minute window.</p></div></section>
+        </div>
+        <section class="panel users-panel hidden" id="usersPanel"><div class="panel-heading"><div><h3>User accounts</h3><p class="muted">Accounts registered in this system</p></div><button class="outline-button" id="reloadUsers">↻ Reload</button></div><div class="table-wrap"><table><thead><tr><th>USERNAME</th><th>EMAIL</th><th>ROLE</th><th>CREATED</th></tr></thead><tbody id="usersBody"><tr><td colspan="4" class="empty">Open User accounts to load users.</td></tr></tbody></table></div></section>
+      </section>
+      <footer class="footer"><span>© 2026 SENTINEL SECURITY</span><span><i></i> API connection ready</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast hidden"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
